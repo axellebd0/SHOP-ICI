@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Onglet Panier - Exemple</title>
+  <style>
+    :root{
+      --accent:#ff5a5f;
+      --bg:#f6f7fb;
+      --card:#fff;
+      --muted:#7a7f86;
+      --shadow: 0 8px 30px rgba(20,20,30,0.08);
+      --radius:12px;
+      font-family: Inter, system-ui, Arial, sans-serif;
+    }
+    body{margin:0;background:var(--bg);color:#111;padding:20px}
+    /* --- Bouton onglet panier (fixe, droite) --- */
+    .cart-tab {
+      position: fixed;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--accent);
+      color: white;
+      border-radius: 28px;
+      padding: 12px 16px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      z-index:1100;
+    }
+    .cart-tab .icon {font-weight:700}
+    .cart-count {
+      background:rgba(255,255,255,0.12);
+      padding:6px 8px;border-radius:999px;font-weight:700;font-size:13px;
+    }
+
+    /* --- Panel du panier (slide-in) --- */
+    .cart-panel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100vh;
+      width: 380px;
+      max-width: 100%;
+      transform: translateX(110%);
+      transition: transform .28s cubic-bezier(.2,.9,.3,1);
+      background:var(--card);
+      box-shadow: -102px 0 30px rgba(0, 0, 255, 0.08);
+      z-index:1200;
+      display:flex;
+      flex-direction:column;
+      padding:18px;
+      border-radius: 12px 0 0 12px;
+    }
+    .cart-panel.open { transform: translateX(0); }
+
+    .cart-header{display:flex;justify-content:space-between;align-items:center}
+    .cart-header h3{margin:0;font-size:18px}
+    .close-btn{background:transparent;border:none;font-size:18px;cursor:pointer;color:var(--muted)}
+
+    .cart-empty{margin-top:28px;color:var(--muted);text-align:center}
+
+    .cart-items{margin-top:12px;overflow:auto;flex:1;padding-right:6px}
+    .cart-item{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;border:1px solid #f0f0f0;margin-bottom:10px;background:#fff}
+    .cart-item .thumb{width:64px;height:64px;border-radius:8px;background:linear-gradient(135deg,#fafafa,#eee);display:flex;align-items:center;justify-content:center;color:#bbb;font-weight:700}
+    .cart-item .meta{flex:1}
+    .cart-item .meta .name{font-weight:700;font-size:14px}
+    .cart-item .meta .price{color:var(--accent);font-weight:800;margin-top:6px}
+    .cart-item .remove{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px}
+
+    .cart-footer{padding-top:12px;border-top:1px dashed #eee}
+    .cart-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .checkout{width:100%;padding:12px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}
+
+    /* Petit style pour demo produits (page) */
+    .products {display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+    .product{background:#fff;padding:12px;border-radius:10px;box-shadow:var(--shadow);text-align:center}
+    .product .buy{margin-top:8px;padding:8px 10px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-weight:700}
+    @media(max-width:520px){
+      .cart-panel{width:100%;max-width:420px}
+      .cart-tab{right:10px;padding:10px}
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Page de test - Produits</h2>
+  <p>Exemple d'utilisation : clique sur <strong>Ajouter au panier</strong>.</p>
+
+  <div class="products" id="products">
+    <!-- Exemples produits ; tu peux les remplacer par les tiens -->
+  </div>
+
+  <!-- Onglet panier -->
+  <div class="cart-tab" id="cartTab" title="Ouvrir le panier">
+    <div class="icon">🛒</div>
+    <div class="cart-count" id="cartCount">0</div>
+  </div>
+
+  <!-- Panel du panier -->
+  <aside class="cart-panel" id="cartPanel" aria-hidden="true">
+    <div class="cart-header">
+      <h3>Votre panier</h3>
+      <div>
+        <button class="close-btn" id="closeCart" title="Fermer">✕</button>
+      </div>
+    </div>
+
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty" id="cartEmpty">Votre panier est vide.</div>
+    </div>
+...
+    <div class="cart-footer">
+      <div class="cart-row"><div>Sous-total</div><div id="subtotal">0,00 €</div></div>
+      <div style="color:var(--muted);font-size:25px;margin-bottom:20px">Livraison calculée à la commande</div>
+      <button class="checkout" id="checkoutBtn">Passer à la caisse</button>
+    </div>
+  </aside>
+
+  <script>
+    // ---- Données de demo ----
+    const sampleProducts = [
+      { id: 1, name: 'Écouteurs Bluetooth X100', price: 54.99 },
+      { id: 2, name: 'T-shirt Manga', price: 9.50 },
+      { id: 3, name: 'Lampe LED Ambiance', price: 18.00 },
+      { id: 4, name: 'Housse téléphone', price: 6.75 }
+    ];
+
+    // ---- State du panier ----
+    let cart = []; // {id, name, price, qty}
+
+    // ---- Références DOM ----
+    const productsEl = document.getElementById('products');
+    const cartTab = document.getElementById('cartTab');
+    const cartCount = document.getElementById('cartCount');
+    const cartPanel = document.getElementById('cartPanel');
+    const closeCart = document.getElementById('closeCart');
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartEmpty = document.getElementById('cartEmpty');
+    const subtotalEl = document.getElementById('subtotal');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+
+    // ---- Init produits (demo) ----
+    function renderProducts(){
+      productsEl.innerHTML = '';
+      for(const p of sampleProducts){
+        const box = document.createElement('div');
+        box.className = 'product';
+        box.innerHTML = `
+          <div style="height:96px;border-radius:8px;background:linear-gradient(135deg,#fff,#f3f3f6);display:flex;align-items:center;justify-content:center;font-weight:700;color:#bbb">${p.name.split(' ')[0]}</div>
+          <div style="margin-top:8px;font-weight:700">${p.name}</div>
+          <div style="color:var(--muted);margin-top:6px">${p.price.toFixed(2)} €</div>
+          <button class="buy" onclick="addToCart(${p.id})">Ajouter</button>
+        `;
+        productsEl.appendChild(box);
+      }
+    }
+
+    // ---- Fonctions panier ----
+    function addToCart(id){
+      const prod = sampleProducts.find(x=>x.id===id);
+      if(!prod) return;
+      const existing = cart.find(i=>i.id===id);
+      if(existing){ existing.qty += 1; }
+      else cart.push({ id: prod.id, name: prod.name, price: prod.price, qty: 1 });
+      updateCartUI();
+      openCart();
+    }
+
+    function removeFromCart(id){
+      cart = cart.filter(i => i.id !== id);
+      updateCartUI();
+    }
+
+    function changeQty(id, delta){
+      const it = cart.find(i=>i.id===id);
+      if(!it) return;
+      it.qty += delta;
+      if(it.qty < 1) removeFromCart(id);
+      updateCartUI();
+    }
+
+    function calcSubtotal(){
+      return cart.reduce((s,i)=> s + i.price * i.qty, 0);
+    }
+
+    function updateCartUI(){
+      // compteur
+      const totalItems = cart.reduce((s,i)=> s + i.qty, 0);
+      cartCount.textContent = totalItems;
+
+      // items list
+      cartItemsEl.innerHTML = '';
+      if(cart.length === 0){
+        cartItemsEl.appendChild(cartEmpty);
+        cartEmpty.style.display = 'block';
+      } else {
+        cartEmpty.style.display = 'none';
+        for(const it of cart){
+          const row = document.createElement('div');
+          row.className = 'cart-item';
+          row.innerHTML = `
+            <div class="thumb">${it.name.split(' ')[0]}</div>
+            <div class="meta">
+              <div class="name">${it.name}</div>
+              <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                <button onclick="changeQty(${it.id}, -1)" style="padding:6px;border-radius:6px;border:1px solid #eee;background:#fafafa;cursor:pointer">−</button>
+                <div style="min-width:26px;text-align:center">${it.qty}</div>
+                <button onclick="changeQty(${it.id}, 1)" style="padding:6px;border-radius:6px;border:1px solid #eee;background:#fafafa;cursor:pointer">+</button>
+                <div style="margin-left:8px;color:var(--accent);font-weight:800">${(it.price * it.qty).toFixed(2)} €</div>
+              </div>
+            </div>
+            <button class="remove" onclick="removeFromCart(${it.id})" title="Supprimer">✕</button>
+          `;
+          cartItemsEl.appendChild(row);
+        }
+      }
+
+      // subtotal
+      subtotalEl.textContent = calcSubtotal().toFixed(2) + ' €';
+    }
+
+    // ---- Panel open/close ----
+    function openCart(){ cartPanel.classList.add('open'); cartPanel.setAttribute('aria-hidden','false'); }
+    function closeCartPanel(){ cartPanel.classList.remove('open'); cartPanel.setAttribute('aria-hidden','true'); }
+
+    // events
+    cartTab.addEventListener('click', ()=> { 
+      if(cartPanel.classList.contains('open')) closeCartPanel(); else openCart();
+    });
+    closeCart.addEventListener('click', closeCartPanel);
+    checkoutBtn.addEventListener('click', ()=> {
+      if(cart.length===0){ alert('Votre panier est vide.'); return; }
+      alert('Passage en caisse (simulation)\nMontant : ' + calcSubtotal().toFixed(2) + ' €');
+    });
+
+    // expose utiles dans window pour les boutons inline
+    window.addToCart = addToCart;
+    window.removeFromCart = removeFromCart;
+    window.changeQty = changeQty;
+
+    // init
+    renderProducts();
+    updateCartUI();
+  </script>
+
+</body>
+</html>
