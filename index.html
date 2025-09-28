@@ -6,9 +6,10 @@
   <title>Mini-AliExpress — Boutique</title>
   <style>
     :root{
-      --accent:#ff5a5f; /* rouge/orange Ali-ish */
-      --bg:#f6f7fb;
-      --card:#ffffff;
+      --accent:#000000; /* rouge/orange Ali-ish */
+      --bg:#f492f0
+      ;
+      --card:#5e429c;
       --muted:#7a7f86;
       --shadow: 0 6px 20px rgba(30,30,30,0.08);
       --radius:10px;
@@ -162,7 +163,7 @@
       <div class="row" style="justify-content:space-between;align-items:center">
         <div>
           <strong>AliexMini</strong>
-          <div style="color:var(--muted);margin-top:6px">© 2025 — SHOP-ICI LA BOUTIQUE EN LIGNE</div>
+          <div style="color:var(--muted);margin-top:6px"><href="https://www.example.com/page.html"© 2025 — SHOP-ICI LA BOUTIQUE EN LIGNE></href></div>
         </div>
         <div style="color:var(--muted)">Aide • FAQ • Conditions</div>
       </div>
@@ -236,7 +237,7 @@
     function addToCart(btn){
       const card = btn.closest('.card');
       const id = card.dataset.id;
-      alert('Produit ' + id + ' ajouté au panier (simulation).');
+      alert('Produit ' + id + ' ajouté au panier (si.');
     }
     function showQuick(btn){
       const card = btn.closest('.card');
